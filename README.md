@@ -35,14 +35,14 @@ plt.ylabel('Count', fontsize = 12, weight='bold')
 plt.title('Distribution between the test group and the control group', fontsize = 14, weight='bold')
 plt.show()
 ```
-![image](https://user-images.githubusercontent.com/65902301/178162568-34841081-8f62-4239-8c4f-fb328054b827.png)
+![image](https://user-images.githubusercontent.com/65902301/178165709-ea9e9396-c9be-40dc-b0ea-84cc58677ef3.png)
 
 Through the total 59721 users, 44886 were assigned to the control group and 14835 were assigned to the test group.
 The probability that a user is assigned to the control group is approximately 75 percent
 while the probabilety that a user is assigned to the test group is approximately 25 percent.
 
-## 2-Is a user that must call-in to cancel more likely to generate at least 1 addition REBILL?
-from this point, both datasets are needed at the same time so the two datasets will be mereged.
+## 2- Is a user that must call-in to cancel more likely to generate at least 1 addition REBILL?
+From this point, both datasets are needed at the same time so the two datasets will be mereged.
 we will evaluate all the users even those without a transaction so a left join will be performed.
 ```
 df = pd.merge(test_data,trans_data,on='sample_id',how='left')
@@ -78,6 +78,8 @@ total_trans_df = (df.drop('transaction_id', axis =1)).groupby(['sample_id', 'tes
 ```
 total_group_trans = (total_trans_df.drop('sample_id', axis =1)).groupby('test_group', as_index=False).sum()
 ```
+![image](https://user-images.githubusercontent.com/65902301/178165805-eec806fc-e52a-4fce-bdde-365cba9f2b7b.png)
+
 ```
 crtl_avg_rev = (total_group_trans['transaction_amount'][0])/44886
 test_avg_rev = (total_group_trans['transaction_amount'][1])/14835
@@ -88,13 +90,13 @@ On the other hand, each user that was assigned to the **test group** generates *
 As a result a user that must **call-in** to cancel is **more likely** to generate more revenues.
 
 ## 4- Is a user that must call-in more likely to produce a higher chargeback rate(CHARGEBACKs/REBILLs)?
-breakdown of transaction type numbers between the test group users:
+Breakdown of transaction type numbers between the test group users:
 ```
 test_trans_types = (df.drop(['transaction_id', 'transaction_amount'], axis =1)).groupby(['transaction_type', 'test_group'],).count().sort_values('test_group').iloc[3:]
 ```
 ![image](https://user-images.githubusercontent.com/65902301/178163401-f192d642-5170-40e7-b2b0-d1d151aa9829.png)
 
-breakdown of transaction type numbers between the control group users:
+Breakdown of transaction type numbers between the control group users:
 ```
 ctrl_trans_types = (df.drop(['transaction_id', 'transaction_amount'], axis =1)).groupby(['transaction_type', 'test_group'],).count().sort_values('test_group').iloc[:3]
 ```
